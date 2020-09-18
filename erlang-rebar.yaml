@@ -1,0 +1,4 @@
+version_contrl: github
+src_repo: rebar/rebar
+tag_prefix: NA
+seperator: "."

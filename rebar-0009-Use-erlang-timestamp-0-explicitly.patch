@@ -1,0 +1,39 @@
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 2 Mar 2016 13:52:44 +0300
+Subject: [PATCH] Use erlang:timestamp/0 explicitly
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+
+diff --git a/src/rebar_utils.erl b/src/rebar_utils.erl
+index 5947277..8fe9719 100644
+--- a/src/rebar_utils.erl
++++ b/src/rebar_utils.erl
+@@ -791,7 +791,7 @@ cross_sizeof(Arch, Type) ->
+     end.
+ 
+ mktempfile(Suffix) ->
+-    {A,B,C} = rebar_now(),
++    {A,B,C} = erlang:timestamp(),
+     Dir = temp_dir(),
+     File = "rebar_"++os:getpid()++
+         integer_to_list(A)++"_"++
+@@ -815,19 +815,6 @@ windows_temp_dir() ->
+         TEMP -> TEMP
+     end.
+ 
+-rebar_now() ->
+-    case erlang:function_exported(erlang, timestamp, 0) of
+-        true ->
+-            erlang:timestamp();
+-        false ->
+-            %% erlang:now/0 was deprecated in 18.0. One solution to avoid the
+-            %% deprecation warning is to use
+-            %% -compile({nowarn_deprecated_function, [{erlang, now, 0}]}), but
+-            %% that would raise a warning in versions older than 18.0.  Calling
+-            %% erlang:now/0 via apply/3 avoids that.
+-            apply(erlang, now, [])
+-    end.
+-
+ native_wordsize() ->
+     try erlang:system_info({wordsize, external}) of
+         Val ->
