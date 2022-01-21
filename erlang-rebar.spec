@@ -4,7 +4,7 @@
 %{!?need_bootstrap: %global need_bootstrap  %{need_bootstrap_set}}
 Name:		erlang-%{realname}
 Version:	2.6.4
-Release:	1
+Release:	2
 BuildArch:	noarch
 Summary:	Erlang Build Tools
 License:	MIT
@@ -23,6 +23,7 @@ Patch10:	rebar-0010-Try-shell-variable-VSN-first.patch
 Patch11:	rebar-0011-Allow-ignoring-missing-deps.patch
 Patch12:	rebar-0012-Drop-obsolete-crypto-rand_uniform-2.patch
 Patch13:	rebar-0013-Remove-compat-random-modules.patch
+Patch14:        0014-remove-lerl_interface-build-flag.patch
 %if 0%{?need_bootstrap} < 1
 BuildRequires:       	erlang-rebar 	erlang-getopt
 %else
@@ -64,6 +65,7 @@ EOT
 %patch11 -p1 -b .skip_deps_checking
 %patch12 -p1 -b .erl20
 %patch13 -p1 -b .erl22_compat
+%patch14 -p1
 
 %build
 %if 0%{?need_bootstrap} < 1
@@ -92,5 +94,8 @@ sed -i -e "s,-noshell -noinput,-noshell -noinput -pa .,g" ./rebar
 %{erlang_appdir}/
 
 %changelog
+* Fri Jan 21 2022 Ge Wang <wangge20huawei.com> - 2.6.4-2
+- Remove -lerl_interface flag from default LDFLAG due to erlang updated to 23.3.4.9 version
+
 * Fri Sep 4 2020 Ge Wang <wangge20@huawei.com> - 2.6.4-1
 - Package init
